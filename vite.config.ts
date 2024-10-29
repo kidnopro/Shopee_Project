@@ -7,5 +7,8 @@ export default defineConfig({
   server:{
     //Cấu hình port cho server từ 5173 về 3000 yêu em
     port: 3000
+  },
+  css: { 
+    devSourcemap: true
   }
 })
