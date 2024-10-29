@@ -3,7 +3,7 @@ import logoShopee from "../../assets/images/logoShopee.png";
 
 export default function RegisterHeader() {
   return (
-    <header className="py-5 h-24 bg-white-400 bg-white z-50 shadow-lg">
+    <header className="py-5 h-24 bg-white-400 bg-white z-50 shadow-lg sticky top-0">
       <div className="max-w-7xl mx-auto flex justify-between items-center h-full px-4">
         <nav className="flex items-center">
           <Link to="/" className="flex items-center">
