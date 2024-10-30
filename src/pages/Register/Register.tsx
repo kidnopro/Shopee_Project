@@ -22,13 +22,14 @@ export default function Register() {
     resolver: yupResolver(schema),
   });
 
-  const registerAccountMutation = useMutation({
-    mutationFn : (body: Omit<FormData, "confirm_password">) => registerAccount(body),
+  const loginMutation = useMutation({
+    mutationFn : (body: Omit<FormData, 
+    "confirm_password">) => registerAccount(body),
   })
  
   const onSubmit = handleSubmit((data) => {
     const body = omit(data,["confirm_password"])
-    registerAccountMutation.mutate(body,{
+    loginMutation.mutate(body,{
       onSuccess: (data) => {
         console.log(data)
       },
@@ -39,7 +40,7 @@ export default function Register() {
           Object.keys(formError).forEach((key) => {
             setError(key as keyof Omit<FormData, "confirm_password">,{
               message: formError[key as keyof Omit<FormData, "confirm_password">],
-              type: "server"
+              type: "Server"
             })
           })
         }

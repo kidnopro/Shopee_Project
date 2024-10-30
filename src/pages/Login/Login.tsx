@@ -1,9 +1,53 @@
 import { Link } from "react-router-dom";
 import Background from "../../assets/images/bg_login_register.jpg"
+import { schema,Schema } from "../../utils/rule";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
+import { isAxiosUnprocessableEntityError } from "../../utils/utils";
+import { ResponseApi } from "../../types/utils.type";
+import Input from "../../components/Input/Input";
+import { loginAccount } from "../../apis/auth.api";
 
 
+type FormData =   Omit<Schema,"confirm_password">;
+const loginSchema = schema.omit(["confirm_password"])
 export default function Login() {
-  
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors },  
+  } = useForm<FormData>({
+    resolver: yupResolver(loginSchema),
+  });
+
+  const registerAccountMutation = useMutation({
+    mutationFn : (body: Omit<FormData, 
+    "confirm_password">) => loginAccount(body),
+  })
+ 
+  const onSubmit = handleSubmit((data) => {
+    registerAccountMutation.mutate(data,{
+      onSuccess: (data) => {
+        console.log(data)
+      },
+      onError: (error) => {
+       if(isAxiosUnprocessableEntityError<ResponseApi<FormData>>(error)) {
+        const formError = error.response?.data.data
+        if(formError) {
+          Object.keys(formError).forEach((key) => {
+            setError(key as keyof FormData,{
+              message: formError[key as keyof FormData],
+              type: "Server"
+            })
+          })
+        }
+       }
+      }
+    })
+  })   
+
 
   return (
     <div
@@ -15,27 +59,29 @@ export default function Login() {
           <div className="lg:col-span-2 lg:col-start-4">
             <form
               className="p-10 rounded bg-white shadow-sm"
-             
+              onSubmit={onSubmit}
               noValidate
             >
               <div className="text-2xl">Đăng Nhập</div>
-              <div className="mt-8">
-                <input type="text" 
+              <Input
                 name="email"
-                className="p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                placeholder="Email "
-                />
-               <div className="mt-2 text-red-500 min-h-[1rem] text-sm"></div>
-              </div>
-
-              <div className="mt-1">
-                <input type="password" 
+               register={register}
+               type="email"
+               className="mt-8"
+               errorMessage={errors.email?.message}
+               placeholder="Email"
+             
+              />
+              {/* Kết thúc input */}
+              <Input
                 name="password"
-                className="p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                placeholder="Mật khẩu"
-                />
-               <div className="mt-2 text-red-500 min-h-[1rem] text-sm"></div>
-              </div>
+               register={register}
+               type="password"
+               className="mt-1"
+               errorMessage={errors.password?.message}
+               placeholder="Mật khẩu"
+             
+              />
               {/* Kết thúc input */}
             
               {/* Nút button */}
