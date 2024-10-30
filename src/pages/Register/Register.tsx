@@ -1,36 +1,41 @@
 import { Link } from "react-router-dom";
 import Background from "../../assets/images/bg_login_register.jpg"
-import { RegisterOptions, useForm } from "react-hook-form";
-import { getRules } from "../../utils/rule";
+import { useForm } from "react-hook-form";
+import Input from "../../components/Input/Input";
+import { schema } from "../../utils/rule";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+
 
 interface FormData{
-  email: string;
-  password: string;
-  confirm_password: string;
+ 
 }
 
 
-export default function Login() {
+export default function Register() {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors },  
-  } = useForm<FormData>();
-  const rules = getRules(getValues);    
-  const onSubmit = handleSubmit(data => {
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
 
+  
+  
+  const onSubmit = handleSubmit(data => {
+   
   })
 
   
-
 
   return (
     <div
       className="bg-fit bg-center h-screen"
       style={{ backgroundImage: `url(${Background})`, height: "700px" }}
     >
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="container">
         <div className="grid grid-cols-1 lg:grid-cols-5 py-12 lg:py-32 lg:pr-10">
           <div className="lg:col-span-2 lg:col-start-4">
             <form
@@ -40,34 +45,35 @@ export default function Login() {
             >
               <div className="text-2xl">Đăng Ký</div>
 
-              <div className="mt-8">
-                <input type="email" 
-                className="p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                placeholder="Email "
-                {...register("email", rules.email as RegisterOptions<FormData>)}
-                />
-               <div className="mt-2 text-red-500 min-h-[1.25rem] text-sm"> {errors.email?.message} </div>
-              </div>
-
-              <div className="mt-1">
-                <input type="password" 
-                className="p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                placeholder="Mật khẩu"
-                {...register("password",rules.password as RegisterOptions<FormData>)}
-                />
-               <div className="mt-2 text-red-500 min-h-[1.25rem] text-sm "> {errors.password?.message} </div>
-              </div>
-
-              <div className="mt-1">
-                <input type="password" 
-                className="p-3 w-full outline-none border border-gray-300 focus:border-gray-500 rounded-sm focus:shadow-sm"
-                placeholder="Nhâp lại mật khẩu"
-                {...register("confirm_password",rules.confirm_password as RegisterOptions<FormData>)}
-                  />
-               <div className="mt-2 text-red-500 min-h-[1.25rem] text-sm"> {errors.confirm_password?.message} </div>
-              </div>
+              <Input
+                name="email"
+               register={register}
+               type="email"
+               className="mt-8"
+               errorMessage={errors.email?.message}
+               placeholder="Email"
+             
+              />
               {/* Kết thúc input */}
-            
+              <Input
+                name="password"
+               register={register}
+               type="password"
+               className="mt-1"
+               errorMessage={errors.password?.message}
+               placeholder="Mật khẩu"
+              
+              />
+                {/* Kết thúc input */}
+                <Input
+               name="confirm_password"
+               register={register}
+               type="password"
+               className="mt-1"
+               errorMessage={errors.confirm_password?.message}
+               placeholder="Nhập lại mật khẩu"
+              
+              />
               {/* Nút button */}
              <div className="mt-2">
                <button 
