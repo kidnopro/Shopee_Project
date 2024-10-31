@@ -1,25 +1,32 @@
 import { Link } from 'react-router-dom'
+import { Product as ProductType } from '../../../../types/product.type'
+import { formatCurrency, formatNumberToSocialStyle } from '../../../../utils/utils'
 
-export default function Product() {
+interface Props {
+  product: ProductType
+}
+
+export default function Product({ product }: Props) {
   return (
     <Link to='/'>
       <div className='bg-white shadow rounded-sm hover:translate-y-[-0.0625rem] hover:shadow-md duration-100 transition-transform'>
         <div className='w-full pt-[100%] relative'>
           <img
-            src='https://tinhayvip.com/wp-content/uploads/2022/01/hot-girl-nguc-khung-lo-anh-khoa-than-khong-che-5.jpg'
-            alt='product'
+            src={product.image}
+            alt={product.name}
             className='absolute top-0 left-0 bg-white w-full h-full object-cover'
           />
         </div>
         <div className='p-2 overflow-hidden'>
-          <div className='min-h-[2rem] text-sm line-clamp-2 '>
-            ddddddddddddddđfdfdsfdsureiurêrewrewrewrewrewrewrewrewrew
-          </div>
+          <div className='min-h-[2rem] text-sm line-clamp-2 '>{product.name}</div>
           <div className='flex items-center mt-3'>
-            <div className='line-through max-w-[50%] truncate'>đ2000</div>
-            <div className='text-orange-500 truncate ml-1'>
+            <div className='line-through max-w-[50%] truncate text-gray-400'>
               <span className='text-xs'>đ</span>
-              <span>2000</span>
+              <span className='text-xs'>{formatCurrency(product.price_before_discount)}</span>
+            </div>
+            <div className='text-orange-500 truncate ml-1'>
+              <span>đ</span>
+              <span className='text-sm'>{formatCurrency(product.price)}</span>
             </div>
           </div>
           <div className='mt-3 flex items-center justify-end'>
@@ -60,8 +67,8 @@ export default function Product() {
               </div>
             </div>
             <div className='ml-2 text-sm'>
-              <span>5.66k</span>
-              <span className='ml-1'>Đã bán</span>
+              <span>{formatNumberToSocialStyle(product.sold)}</span>
+              <span className='ml-1 text-gray-400'>Đã bán</span>
             </div>
           </div>
         </div>
