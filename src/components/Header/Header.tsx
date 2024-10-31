@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Popover from '../Popover/Popover'
 import { useMutation } from '@tanstack/react-query'
-import { logout } from '../../apis/auth.api'
+import authApi from '../../apis/auth.api'
 import { AppContext } from '../../contexts/app.context'
 import path from '../../constants/path'
 
@@ -26,7 +26,7 @@ export default function Header() {
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
 
   const logoutMutation = useMutation({
-    mutationFn: logout,
+    mutationFn: authApi.logout,
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
@@ -162,6 +162,7 @@ export default function Header() {
               <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
                 <div className='p-2'>
                   <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+
                   <div className='mt-5'>
                     <div className='mt-4 flex'>
                       <div className='flex-shrink-0'>
@@ -172,75 +173,7 @@ export default function Header() {
                         />
                       </div>
                       <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>isdajdasidsjaidasjidsajdisadjsiadjsaidasjidasjdiasjdias</div>
-                      </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <span className='text-orange-500'>đ400.899</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://we25.vn/media2018/Img_News/2023/02/28/sac-voc-nu-than-phim-nguoi-lon-eimi-fukada-khi-sang-viet-nam-fan-tho-dai-app-ganh-cong-lung-330381668-1193720527950428-1062219357804890875-n-1677308964-853-width780height1015_20230228150639.jpeg'
-                          alt=''
-                          className='w-11 h-11 object-cover'
-                        />
-                      </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>isdajdasidsjaidasjidsajdisadjsiadjsaidasjidasjdiasjdias</div>
-                      </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <span className='text-orange-500'>đ400.899</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://we25.vn/media2018/Img_News/2023/02/28/sac-voc-nu-than-phim-nguoi-lon-eimi-fukada-khi-sang-viet-nam-fan-tho-dai-app-ganh-cong-lung-330381668-1193720527950428-1062219357804890875-n-1677308964-853-width780height1015_20230228150639.jpeg'
-                          alt=''
-                          className='w-11 h-11 object-cover'
-                        />
-                      </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>isdajdasidsjaidasjidsajdisadjsiadjsaidasjidasjdiasjdias</div>
-                      </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <span className='text-orange-500'>đ400.899</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://we25.vn/media2018/Img_News/2023/02/28/sac-voc-nu-than-phim-nguoi-lon-eimi-fukada-khi-sang-viet-nam-fan-tho-dai-app-ganh-cong-lung-330381668-1193720527950428-1062219357804890875-n-1677308964-853-width780height1015_20230228150639.jpeg'
-                          alt=''
-                          className='w-11 h-11 object-cover'
-                        />
-                      </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>isdajdasidsjaidasjidsajdisadjsiadjsaidasjidasjdiasjdias</div>
-                      </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <span className='text-orange-500'>đ400.899</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://we25.vn/media2018/Img_News/2023/02/28/sac-voc-nu-than-phim-nguoi-lon-eimi-fukada-khi-sang-viet-nam-fan-tho-dai-app-ganh-cong-lung-330381668-1193720527950428-1062219357804890875-n-1677308964-853-width780height1015_20230228150639.jpeg'
-                          alt=''
-                          className='w-11 h-11 object-cover'
-                        />
-                      </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>isdajdasidsjaidasjidsajdisadjsiadjsaidasjidasjdiasjdias</div>
+                        <div className='truncate'>Nữ sinh mới lên đại học mơn mởn</div>
                       </div>
                       <div className='ml-2 flex-shrink-0'>
                         <span className='text-orange-500'>đ400.899</span>
