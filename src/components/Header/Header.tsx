@@ -4,6 +4,7 @@ import Popover from '../Popover/Popover'
 import { useMutation } from '@tanstack/react-query'
 import { logout } from '../../apis/auth.api'
 import { AppContext } from '../../contexts/app.context'
+import path from '../../constants/path'
 
 export default function Header() {
   const [placeholder, setPlaceholder] = useState('Free Ship Đơn Từ 0Đ, Mua Hàng Ngay')
@@ -22,12 +23,13 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [])
   // Kết thúc đoạn placeholder
-  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+  const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSuccess: () => {
       setIsAuthenticated(false)
+      setProfile(null)
     }
   })
 
@@ -82,7 +84,7 @@ export default function Header() {
           cursor-pointer ml-6'
               renderPopover={
                 <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                  <Link to='/profile' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
+                  <Link to={path.profile} className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
                     Tài khoản của tôi
                   </Link>
                   <Link to='/' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
@@ -104,16 +106,16 @@ export default function Header() {
                   className='w-full h-full object-cover rounded-full'
                 />
               </div>
-              <div className=''>hoanganhcuto</div>
+              <div className=''>{profile?.email}</div>
             </Popover>
           )}
           {!isAuthenticated && (
             <div className='flex items-center'>
-              <Link to='/register' className='mx-3 capitalize hover:text-gray-300'>
+              <Link to={path.register} className='mx-3 capitalize hover:text-gray-300'>
                 Đăng ký
               </Link>
               <div className='border-r-[1px] border-p-white/40 h-4'></div>
-              <Link to='/login' className='mx-3 capitalize hover:text-gray-300'>
+              <Link to={path.login} className='mx-3 capitalize hover:text-gray-300'>
                 Đăng nhập
               </Link>
             </div>
