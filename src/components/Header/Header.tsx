@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Popover from '../Popover/Popover'
+import { useMutation } from '@tanstack/react-query'
+import { logout } from '../../apis/auth.api'
+import { AppContext } from '../../contexts/app.context'
 
 export default function Header() {
   const [placeholder, setPlaceholder] = useState('Free Ship Đơn Từ 0Đ, Mua Hàng Ngay')
@@ -19,6 +22,18 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [])
   // Kết thúc đoạn placeholder
+  const { setIsAuthenticated, isAuthenticated } = useContext(AppContext)
+
+  const logoutMutation = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setIsAuthenticated(false)
+    }
+  })
+
+  const handleLogout = () => {
+    logoutMutation.mutate()
+  }
 
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-3 text-white  bg-white z-50 '>
@@ -61,30 +76,48 @@ export default function Header() {
               <path strokeLinecap='round' strokeLinejoin='round' d='m19.5 8.25-7.5 7.5-7.5-7.5' />
             </svg>
           </Popover>
-          <Popover
-            className='flex items-center py-1 hover:text-gray-300 
+          {isAuthenticated && (
+            <Popover
+              className='flex items-center py-1 hover:text-gray-300 
           cursor-pointer ml-6'
-            renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
-                <Link to='/profile' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
-                  Tài khoản của tôi
-                </Link>
-                <Link to='/' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
-                  Đơn mua
-                </Link>
-                <button className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>Đăng xuất</button>
+              renderPopover={
+                <div className='bg-white relative shadow-md rounded-sm border border-gray-200'>
+                  <Link to='/profile' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
+                    Tài khoản của tôi
+                  </Link>
+                  <Link to='/' className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'>
+                    Đơn mua
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className='block py-2 px-3  bg-white hover:text-orange-500 w-full text-left'
+                  >
+                    Đăng xuất
+                  </button>
+                </div>
+              }
+            >
+              <div className='w-6 h-6 mr-2 flex-shrink-0'>
+                <img
+                  src='https://images2.thanhnien.vn/528068263637045248/2024/2/29/ngoc-trinh-17092008337491979682561.jpg'
+                  alt='avatar'
+                  className='w-full h-full object-cover rounded-full'
+                />
               </div>
-            }
-          >
-            <div className='w-6 h-6 mr-2 flex-shrink-0'>
-              <img
-                src='https://images2.thanhnien.vn/528068263637045248/2024/2/29/ngoc-trinh-17092008337491979682561.jpg'
-                alt='avatar'
-                className='w-full h-full object-cover rounded-full'
-              />
+              <div className=''>hoanganhcuto</div>
+            </Popover>
+          )}
+          {!isAuthenticated && (
+            <div className='flex items-center'>
+              <Link to='/register' className='mx-3 capitalize hover:text-gray-300'>
+                Đăng ký
+              </Link>
+              <div className='border-r-[1px] border-p-white/40 h-4'></div>
+              <Link to='/login' className='mx-3 capitalize hover:text-gray-300'>
+                Đăng nhập
+              </Link>
             </div>
-            <div className=''>hoanganhcuto</div>
-          </Popover>
+          )}
         </div>
       </div>
       <div className='grid grid-cols-12 gap-4 mt-4 items-center'>
