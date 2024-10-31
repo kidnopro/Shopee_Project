@@ -16,7 +16,7 @@ export default function ProductList() {
   console.log(data)
 
   return (
-    <div className='bg-gray-200 py-6 h-[800px]'>
+    <div className='bg-gray-200 py-6 h-[700px]'>
       <div className='container'>
         <div className='grid grid-cols-12 gap-6'>
           <div className='col-span-3'>
