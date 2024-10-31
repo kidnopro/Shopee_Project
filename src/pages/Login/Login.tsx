@@ -10,6 +10,7 @@ import Input from '../../components/Input/Input'
 import { loginAccount } from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/Button/Button'
 
 type FormData = Omit<Schema, 'confirm_password'>
 const loginSchema = schema.omit(['confirm_password'])
@@ -80,9 +81,14 @@ export default function Login() {
 
               {/* Nút button */}
               <div className='mt-2'>
-                <button className='w-full rounded-sm text-center py-4 px-2 uppercase bg-red-600 text-white text-sm hover:bg-red-500'>
+                <Button
+                  className='w-full rounded-sm text-center py-4 px-2 uppercase bg-red-600 text-white text-sm hover:bg-red-500 flex justify-center items-center'
+                  // ngăn chặn user spam button
+                  isLoading={loginMutation.status === 'pending'}
+                  disabled={loginMutation.status === 'pending'}
+                >
                   Đăng nhập
-                </button>
+                </Button>
               </div>
               <div className='mt-4 flex bg-center justify-center'>
                 <p className='text-gray-400'>Bạn chưa có tài khoản?</p>

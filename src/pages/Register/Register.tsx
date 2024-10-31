@@ -11,6 +11,7 @@ import { isAxiosUnprocessableEntityError } from '../../utils/utils'
 import { ErrorResponse } from '../../types/utils.type'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
+import Button from '../../components/Button/Button'
 
 type FormData = Schema
 
@@ -26,13 +27,13 @@ export default function Register() {
     resolver: yupResolver(schema)
   })
 
-  const loginMutation = useMutation({
+  const registerAccountMutation = useMutation({
     mutationFn: (body: Omit<FormData, 'confirm_password'>) => registerAccount(body)
   })
 
   const onSubmit = handleSubmit((data) => {
     const body = omit(data, ['confirm_password'])
-    loginMutation.mutate(body, {
+    registerAccountMutation.mutate(body, {
       onSuccess: () => {
         setIsAuthenticated(true)
         navigate('/')
@@ -89,12 +90,14 @@ export default function Register() {
               />
               {/* Nút button */}
               <div className='mt-2'>
-                <button
+                <Button
+                  className='w-full rounded-sm text-center py-4 px-2 uppercase bg-red-600 text-white text-sm hover:bg-red-500 flex justify-center items-center'
                   type='submit'
-                  className='w-full rounded-sm text-center py-4 px-2 uppercase bg-red-600 text-white text-sm hover:bg-red-500'
+                  isLoading={registerAccountMutation.status === 'pending'}
+                  disabled={registerAccountMutation.status === 'pending'}
                 >
                   Đăng ký
-                </button>
+                </Button>
               </div>
               <div className='mt-4 flex bg-center justify-center'>
                 <p className='text-gray-400'>Bạn đã có tài khoản?</p>
@@ -108,7 +111,4 @@ export default function Register() {
       </div>
     </div>
   )
-}
-function setIsAuthenticated(arg0: boolean) {
-  throw new Error('Function not implemented.')
 }
