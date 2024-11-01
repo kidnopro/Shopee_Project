@@ -4,16 +4,19 @@ import SortProductList from './components/SortProductList'
 import { useQuery } from '@tanstack/react-query'
 import useQueryParams from '../../hooks/useQueryParams'
 import productApi from '../../apis/product.api'
+import Pagination from '../../components/Pagination/Pagination'
+import { useState } from 'react'
 
 export default function ProductList() {
   const queryParams = useQueryParams()
+  const [page, setPage] = useState(1)
   const { data } = useQuery({
     queryKey: ['products', queryParams],
     queryFn: () => {
       return productApi.getProduct(queryParams)
     }
   })
-  console.log(data)
+  // console.log(data)
 
   return (
     <div className='bg-gray-200 py-6 h-[700px]'>
@@ -32,6 +35,7 @@ export default function ProductList() {
                   </div>
                 ))}
             </div>
+            <Pagination page={page} setPage={setPage} pageSize={20} />
           </div>
         </div>
       </div>
