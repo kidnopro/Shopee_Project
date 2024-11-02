@@ -38,7 +38,6 @@ export default function ProductList() {
     keepPreviousData: true,
     staleTime: 3 * 60 * 1000
   })
-  // console.log(data)
 
   return (
     <div className='bg-gray-200 py-6 h-[700px]'>

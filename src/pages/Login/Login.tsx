@@ -37,6 +37,7 @@ export default function Login() {
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         navigate('/')
+        // loginMutation.reset()
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<FormData>>(error)) {
