@@ -18,7 +18,7 @@ export default function ProductList() {
   const queryConfig: QueryConfig = omitBy(
     {
       page: queryParams.page || '1',
-      limit: queryParams.limit || 2,
+      limit: queryParams.limit || 15,
       sort_by: queryParams.sort_by,
       exclude: queryParams.exclude,
       name: queryParams.name,
@@ -49,7 +49,7 @@ export default function ProductList() {
   })
 
   return (
-    <div className='bg-gray-200 py-6 h-[700px]'>
+    <div className='bg-gray-200 py-6 h-auto'>
       <div className='container'>
         {productsData && (
           <div className='grid grid-cols-12 gap-6'>
