@@ -23,6 +23,7 @@ const InputNumber = forwardRef<HTMLInputElement, InputNumberProps>(function Inpu
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target
     if (/^\d+$/.test(value) || value === '') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       onChange && onChange(event)
       setLocalValue(value)
     }

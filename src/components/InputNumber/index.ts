@@ -1,3 +1,5 @@
-import InputNumber from './InputNumber'
+import inputNumber from './InputNumber'
 
-export default InputNumber
+export default inputNumber
+
+export * from './InputNumber'

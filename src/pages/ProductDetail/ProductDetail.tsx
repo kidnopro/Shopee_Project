@@ -8,8 +8,10 @@ import DOMPurify from 'dompurify'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { ProductListConfig, Product as ProductType } from '../../types/product.type'
 import Product from '../ProductList/components/Product'
+import QuantityController from '../../components/QuantityControler/QuantityController'
 
 export default function ProductDetail() {
+  const [buyCount, setBuyCount] = useState(1)
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
@@ -25,6 +27,7 @@ export default function ProductDetail() {
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
   )
+
   // sản phẩm tương tự
   const queryConfig: ProductListConfig = {
     limit: '6',
@@ -72,7 +75,9 @@ export default function ProductDetail() {
     image.style.top = top + 'px'
     image.style.left = left + 'px'
   }
-
+  const handleBuyCount = (value: number) => {
+    setBuyCount(value)
+  }
   const handleRemoveZoom = () => {
     imageRef.current?.removeAttribute('style')
   }
@@ -179,13 +184,13 @@ export default function ProductDetail() {
               </div>
               <div className='mt-8 flex items-center'>
                 <div className='text-gray-500 capitalize'>Số lượng</div>
-                {/* <QuantityController
+                <QuantityController
                   onDecrease={handleBuyCount}
                   onIncrease={handleBuyCount}
                   onType={handleBuyCount}
                   value={buyCount}
                   max={product.quantity}
-                /> */}
+                />
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
@@ -244,3 +249,6 @@ export default function ProductDetail() {
     </div>
   )
 }
+// function setBuyCount(value: number) {
+//   throw new Error('Function not implemented.')
+// }
