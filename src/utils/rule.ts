@@ -97,7 +97,8 @@ export const schema = yup.object({
     name: 'price-not-allowed',
     message: 'Giá không hợp lệ',
     test: testPriceMinMax
-  })
+  }),
+  name: yup.string().trim().required('Đã tìm kiếm gì đâu mà search hả cụ nội!')
 })
 
 // const loginSchema = schema.omit("confirm_password");
