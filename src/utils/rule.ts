@@ -70,15 +70,6 @@ function testPriceMinMax(this: yup.TestContext<AnyObject>) {
   return price_min !== '' || price_max !== ''
 }
 
-const handleConfirmPasswordYup = (refString: string) => {
-  return yup
-    .string()
-    .required('Vui lòng nhập mật khẩu!')
-    .min(6, 'Mật khẩu ngắn nhất là 6 kí tự!')
-    .max(160, 'Mật khẩu không được dài quá 160 kí tự!')
-    .oneOf([yup.ref(refString)], 'Mật khẩu không khớp nhau!')
-}
-
 export const schema = yup.object({
   email: yup
     .string()
