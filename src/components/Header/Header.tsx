@@ -15,6 +15,7 @@ import purchaseApi from '../../apis/purcharse.api'
 import logocartnoproduct from '../../assets/images/logocartnoproduct.jpg'
 import { formatCurrency } from '../../utils/utils'
 import { toast } from 'react-toastify'
+import { queryClient } from '../../main'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
@@ -36,6 +37,7 @@ export default function Header() {
     return () => clearInterval(interval)
   }, [])
   // Kết thúc đoạn placeholder
+
   const { setIsAuthenticated, isAuthenticated, setProfile, profile } = useContext(AppContext)
   const navigate = useNavigate()
   const queryConfig = useQueryConfig()
@@ -50,12 +52,14 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      queryClient.removeQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
       toast.success('Đăng xuất thành công!', { autoClose: 500 })
     }
   })
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
-    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
+    enabled: isAuthenticated
   })
   const purchasesInCart = purchasesInCartData?.data.data
 
@@ -231,9 +235,12 @@ export default function Header() {
                         {purchasesInCart.length > MAX_PURCHASES ? purchasesInCart.length - MAX_PURCHASES : ' '} Thêm vào
                         giỏ hàng
                       </div>
-                      <button className='capitalize bg-orange-500 hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                      <Link
+                        to={path.cart}
+                        className='capitalize bg-orange-500 hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'
+                      >
                         Xem giỏ hàng
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ) : (
