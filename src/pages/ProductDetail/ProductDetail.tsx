@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import ProductRating from '../ProductList/components/ProductRating/ProductRating'
@@ -9,6 +9,10 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { ProductListConfig, Product as ProductType } from '../../types/product.type'
 import Product from '../ProductList/components/Product'
 import QuantityController from '../../components/QuantityControler/QuantityController'
+import purchaseApi from '../../apis/purcharse.api'
+import { queryClient } from '../../main'
+import { purchasesStatus } from '../../constants/purchase'
+import { toast } from 'react-toastify'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
@@ -18,7 +22,6 @@ export default function ProductDetail() {
     queryKey: ['product', id],
     queryFn: () => productApi.getProductDetail(id as string)
   })
-
   const [currentIndexImages, setcurrentIndexImages] = useState([0, 5])
   const [activeImage, setActiveImage] = useState('')
   const product = productDetailData?.data.data
@@ -27,7 +30,6 @@ export default function ProductDetail() {
     () => (product ? product.images.slice(...currentIndexImages) : []),
     [product, currentIndexImages]
   )
-
   // sản phẩm tương tự
   const queryConfig: ProductListConfig = {
     limit: '6',
@@ -42,6 +44,11 @@ export default function ProductDetail() {
     staleTime: 3 * 60 * 1000,
     enabled: Boolean(product)
   })
+  // cart
+  const addToCartMutation = useMutation({
+    mutationFn: (body: { product_id: string; buy_count: number }) => purchaseApi.addToCart(body)
+  })
+
   useEffect(() => {
     if (product && product.images.length > 0) {
       setActiveImage(product.images[0])
@@ -75,11 +82,24 @@ export default function ProductDetail() {
     image.style.top = top + 'px'
     image.style.left = left + 'px'
   }
+
+  const handleRemoveZoom = () => {
+    imageRef.current?.removeAttribute('style')
+  }
   const handleBuyCount = (value: number) => {
     setBuyCount(value)
   }
-  const handleRemoveZoom = () => {
-    imageRef.current?.removeAttribute('style')
+  // giỏ hàng
+  const addToCart = () => {
+    addToCartMutation.mutate(
+      { buy_count: buyCount, product_id: product?._id as string },
+      {
+        onSuccess: () => {
+          toast.success('Thêm thành công', { autoClose: 500 })
+          queryClient.invalidateQueries({ queryKey: ['purchases', { status: purchasesStatus.inCart }] })
+        }
+      }
+    )
   }
 
   if (!product) return null
@@ -194,7 +214,10 @@ export default function ProductDetail() {
                 <div className='ml-6 text-sm text-gray-500'>{product.quantity} sản phẩm có sẵn</div>
               </div>
               <div className='mt-8 flex items-center'>
-                <button className='flex h-12 items-center justify-center rounded-sm border border-orange-500 bg-orange/10 px-5 capitalize text-orange-500 shadow-sm hover:bg-black-500'>
+                <button
+                  className='flex h-12 items-center justify-center rounded-sm border border-orange-500 bg-orange/10 px-5 capitalize text-orange-500 shadow-sm hover:bg-black-500'
+                  onClick={addToCart}
+                >
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -249,6 +272,3 @@ export default function ProductDetail() {
     </div>
   )
 }
-// function setBuyCount(value: number) {
-//   throw new Error('Function not implemented.')
-// }

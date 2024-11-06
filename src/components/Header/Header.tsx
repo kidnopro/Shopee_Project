@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { createSearchParams, Link, useNavigate } from 'react-router-dom'
 import Popover from '../Popover/Popover'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import authApi from '../../apis/auth.api'
 import { AppContext } from '../../contexts/app.context'
 import path from '../../constants/path'
@@ -10,10 +10,15 @@ import useQueryConfig from '../../hooks/useQueryConfig'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { omit } from 'lodash'
+import { purchasesStatus } from '../../constants/purchase'
+import purchaseApi from '../../apis/purcharse.api'
+import logocartnoproduct from '../../assets/images/logocartnoproduct.jpg'
+import { formatCurrency } from '../../utils/utils'
+import { toast } from 'react-toastify'
 
 type FormData = Pick<Schema, 'name'>
 const nameSchema = schema.pick(['name'])
-
+const MAX_PURCHASES = 5
 export default function Header() {
   const [placeholder, setPlaceholder] = useState('Free Ship Đơn Từ 0Đ, Mua Hàng Ngay')
   const placeholdersRef = useRef([
@@ -45,8 +50,14 @@ export default function Header() {
     onSuccess: () => {
       setIsAuthenticated(false)
       setProfile(null)
+      toast.success('Đăng xuất thành công!', { autoClose: 500 })
     }
   })
+  const { data: purchasesInCartData } = useQuery({
+    queryKey: ['purchases', { status: purchasesStatus.inCart }],
+    queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
+  })
+  const purchasesInCart = purchasesInCartData?.data.data
 
   const handleLogout = () => {
     logoutMutation.mutate()
@@ -192,52 +203,68 @@ export default function Header() {
         <div className='cols-span-1 justify-self-start'>
           <Popover
             renderPopover={
-              <div className='bg-white relative shadow-md rounded-sm border border-gray-200 max-w-[400px] text-sm'>
-                <div className='p-2'>
-                  <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
-
-                  <div className='mt-5'>
-                    <div className='mt-4 flex'>
-                      <div className='flex-shrink-0'>
-                        <img
-                          src='https://we25.vn/media2018/Img_News/2023/02/28/sac-voc-nu-than-phim-nguoi-lon-eimi-fukada-khi-sang-viet-nam-fan-tho-dai-app-ganh-cong-lung-330381668-1193720527950428-1062219357804890875-n-1677308964-853-width780height1015_20230228150639.jpeg'
-                          alt=''
-                          className='w-11 h-11 object-cover'
-                        />
+              <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+                {purchasesInCart && purchasesInCart.length > 0 ? (
+                  <div className='p-2'>
+                    <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
+                    <div className='mt-5'>
+                      {purchasesInCart.slice(0, MAX_PURCHASES).map((purchase) => (
+                        <div className='mt-2 py-2 flex hover:bg-gray-100' key={purchase._id}>
+                          <div className='flex-shrink-0'>
+                            <img
+                              src={purchase.product.image}
+                              alt={purchase.product.name}
+                              className='w-11 h-11 object-cover'
+                            />
+                          </div>
+                          <div className='flex-grow ml-2 overflow-hidden'>
+                            <div className='truncate'>{purchase.product.name}</div>
+                          </div>
+                          <div className='ml-2 flex-shrink-0'>
+                            <span className='text-orange-500'>₫{formatCurrency(purchase.product.price)}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className='flex mt-6 items-center justify-between'>
+                      <div className='text-xs capitalize text-gray-500'>
+                        {purchasesInCart.length > MAX_PURCHASES ? purchasesInCart.length - MAX_PURCHASES : ' '} Thêm vào
+                        giỏ hàng
                       </div>
-                      <div className='flex-grow ml-2 overflow-hidden'>
-                        <div className='truncate'>Nữ sinh mới lên đại học mơn mởn</div>
-                      </div>
-                      <div className='ml-2 flex-shrink-0'>
-                        <span className='text-orange-500'>đ400.899</span>
-                      </div>
+                      <button className='capitalize bg-orange-500 hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
+                        Xem giỏ hàng
+                      </button>
                     </div>
                   </div>
-                  <div className='flex mt-6 items-center justify-between'>
-                    <div className='text-xs capitalize text-gray-500'>Thêm vào giỏ hàng</div>
-                    <button className='capitalize bg-orange-500 hover:bg-opacity-90 px-4 py-2 rounded-sm text-white'>
-                      Xem giỏ hàng
-                    </button>
+                ) : (
+                  <div className='flex h-[300px] w-[300px] flex-col items-center justify-center p-2'>
+                    <img className='h-24 w-24' src={logocartnoproduct} alt='Giỏ hàng trống' />
+                    <div className='mt-3 capitalize'>Chưa có sản phẩm</div>
                   </div>
-                </div>
+                )}
               </div>
             }
           >
-            <Link to='/' className=''>
+            <Link to='/' className='relative'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={1.5}
                 stroke='currentColor'
-                className='size-6'
+                className='h-8 w-8'
               >
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  d='M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z'
+                  d='M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
                 />
               </svg>
+              {purchasesInCart && purchasesInCart.length > 0 && (
+                <span className='absolute top-[-5px] left-[17px] rounded-full bg-white px-[9px] py-[1px] text-xs text-orange-500 '>
+                  {purchasesInCart?.length}
+                </span>
+              )}
             </Link>
           </Popover>
         </div>

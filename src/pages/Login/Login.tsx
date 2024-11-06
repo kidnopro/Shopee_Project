@@ -11,6 +11,7 @@ import authApi from '../../apis/auth.api'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import Button from '../../components/Button/Button'
+import { toast } from 'react-toastify'
 
 type FormData = Pick<Schema, 'email' | 'password'>
 const loginSchema = schema.pick(['email', 'password'])
@@ -36,7 +37,7 @@ export default function Login() {
       onSuccess: (data) => {
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
-        navigate('/')
+        navigate('/'), toast.success('Đăng nhập thành công!', { autoClose: 500 })
         // loginMutation.reset()
       },
       onError: (error) => {

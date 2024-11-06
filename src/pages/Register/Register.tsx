@@ -12,6 +12,7 @@ import { ErrorResponse } from '../../types/utils.type'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import Button from '../../components/Button/Button'
+import { toast } from 'react-toastify'
 
 type FormData = Pick<Schema, 'email' | 'password' | 'confirm_password'>
 const registerSchema = schema.pick(['email', 'password', 'confirm_password'])
@@ -39,6 +40,7 @@ export default function Register() {
         setIsAuthenticated(true)
         setProfile(data.data.data.user)
         navigate('/')
+        toast.success('Đăng ký thành công!', { autoClose: 500 })
       },
       onError: (error) => {
         if (isAxiosUnprocessableEntityError<ErrorResponse<Omit<FormData, 'cofirm_password'>>>(error)) {
