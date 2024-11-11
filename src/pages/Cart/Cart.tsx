@@ -6,14 +6,37 @@ import path from '../../constants/path'
 import { formatCurrency, generateNameId } from '../../utils/utils'
 import QuantityController from '../../components/QuantityControler/QuantityController'
 import Button from '../../components/Button/Button'
+import { useEffect, useState } from 'react'
+import { Purchase } from '../../types/purchase.type'
+
+interface ExtendedPurchase extends Purchase {
+  disabled: boolean
+  checked: boolean
+}
 
 export default function Cart() {
+  const [extendedPurchases, setExtendedPurchases] = useState<ExtendedPurchase[]>([])
+
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart })
   })
   const purcharseInCart = purchasesInCartData?.data.data
-
+  useEffect(() => {
+    setExtendedPurchases(
+      purcharseInCart?.map((purchase) => ({
+        ...purchase,
+        disabled: false,
+        checked: false
+      })) || []
+    )
+  }, [purcharseInCart])
+  
+  const handleChecke = (productIndex: number) => (event. React.ChangeEvent<HTMLInputElement>) => {
+    setExtendedPurchases((prev) =>
+      prev.map((purchase, index) => (index === productIndex ? { ...purchase, checked: event.target.checked } : purchase))
+    )
+  }
   return (
     <div className='bg-neutral-100 py-16'>
       <div className='container'>
@@ -38,7 +61,7 @@ export default function Cart() {
               </div>
             </div>
             <div className='my-3 rounded-sm bg-white p-5 shadow'>
-              {purcharseInCart?.map((purchase, index) => (
+              {extendedPurchases?.map((purchase, index) => (
                 <div
                   key={purchase._id}
                   className='mb-5 grid grid-cols-12 items-center rounded-sm border border-gray-200 bg-white py-5 px-4 text-center text-sm text-gray-500 first:mt-0'
@@ -46,7 +69,12 @@ export default function Cart() {
                   <div className='col-span-6'>
                     <div className='flex'>
                       <div className='flex flex-shrink-0 items-center justify-center pr-3'>
-                        <input type='checkbox' className='w-5 h-5 accent-orange-500' />
+                        <input
+                          type='checkbox'
+                          className='w-5 h-5 accent-orange-500'
+                          checked={purchase.checked}
+                          onChange={}
+                        />
                       </div>
                       <div className='flex-grow'>
                         <div className='flex'>
