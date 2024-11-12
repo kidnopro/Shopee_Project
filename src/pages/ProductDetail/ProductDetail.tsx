@@ -176,7 +176,7 @@ export default function ProductDetail() {
                   <ProductRating
                     rating={product.rating}
                     activeClassname='fill-orange-500 text-orange h-4 w-4'
-                    noneActiveClassname='fill-gray-300 text-gray-300 h-4 w-4'
+                    noneActiveClassname='fill-gray-300 thjk,fhjhjext-gray-300 h-4 w-4'
                   />
                 </div>
                 <div className='mx-4 h-4 w-[1px] bg-gray-400'></div>
