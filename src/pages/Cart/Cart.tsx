@@ -61,6 +61,13 @@ export default function Cart() {
       }))
     )
   }
+  const handleTypeQuantity = (purchaseIndex: number) => (value: number) => {
+    setExtendedPurchases(
+      produce((draft) => {
+        draft[purchaseIndex].buy_count = value
+      })
+    )
+  }
 
   const handleQuantity = (purchaseIndex: number, value: number, enable: boolean) => {
     if (enable) {
@@ -85,7 +92,7 @@ export default function Cart() {
                   <div className='flex flex-shrink-0 items-center justify-center pr-3'>
                     <input
                       type='checkbox'
-                      className='w-5 h-5 accent-orange-500'
+                      className='w-5 h-5 accent-orange-600'
                       checked={isAllChecked}
                       onChange={handleCheckAll}
                     />
@@ -113,7 +120,7 @@ export default function Cart() {
                       <div className='flex flex-shrink-0 items-center justify-center pr-3'>
                         <input
                           type='checkbox'
-                          className='w-5 h-5 accent-orange-500'
+                          className='w-5 h-5 accent-orange-600'
                           checked={purchase.checked}
                           onChange={handleCheck(index)}
                         />
@@ -161,6 +168,16 @@ export default function Cart() {
                           classNameWrapper='flex item-center'
                           onIncrease={(value) => handleQuantity(index, value, value <= purchase.product.quantity)}
                           onDecrease={(value) => handleQuantity(index, value, value >= 1)}
+                          onType={handleTypeQuantity(index)}
+                          onFocusOut={(value) =>
+                            handleQuantity(
+                              index,
+                              value,
+                              value >= 1 &&
+                                value <= purchase.product.quantity &&
+                                value !== (purcharseInCart as Purchase[])[index].buy_count
+                            )
+                          }
                           disabled={purchase.disabled}
                         />{' '}
                       </div>
@@ -184,7 +201,7 @@ export default function Cart() {
             <div className='flex flex-shrink-0 items-center justify-center pr-3'>
               <input
                 type='checkbox'
-                className='h-5 w-5 accent-orange-500'
+                className='h-5 w-5 accent-orange-600 text-white'
                 checked={isAllChecked}
                 onChange={handleCheckAll}
               />
@@ -195,7 +212,7 @@ export default function Cart() {
             <button className='mx-3 border-none bg-none'>Xóa</button>
           </div>
 
-          <div className='mt-5 flex flex-col sm:mt-0 sm:flex-row sm:items-center'>
+          <div className='mt-5 flex flex-col sm:ml-auto sm:mt-0 sm:flex-row sm:items-center'>
             <div className=''>
               <div className='flex items-center sm:justify-end'>
                 <div className=''>Tổng thanh toán ( 0 sản phẩm )</div>
