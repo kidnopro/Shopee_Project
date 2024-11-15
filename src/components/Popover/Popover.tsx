@@ -1,21 +1,29 @@
-import { useRef, useState, useId, ElementType } from 'react'
-import { useFloating, arrow, offset, shift } from '@floating-ui/react-dom-interactions'
-import { FloatingPortal } from '@floating-ui/react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useState, useRef, useId, type ElementType } from 'react'
+import { useFloating, FloatingPortal, arrow, shift, offset, type Placement } from '@floating-ui/react-dom-interactions'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Props {
   children: React.ReactNode
   renderPopover: React.ReactNode
   className?: string
   as?: ElementType
+  initialOpen?: boolean
+  placement?: Placement
 }
 
-export default function Popover({ children, className, renderPopover }: Props) {
-  const [open, setOpen] = useState(true)
+export default function Popover({
+  children,
+  className,
+  renderPopover,
+  as: Element = 'div',
+  initialOpen,
+  placement = 'bottom-end'
+}: Props) {
+  const [open, setOpen] = useState(initialOpen || false)
   const arrowRef = useRef<HTMLElement>(null)
   const { x, y, reference, floating, strategy, middlewareData } = useFloating({
     middleware: [offset(6), shift(), arrow({ element: arrowRef })],
-    placement: 'bottom-end'
+    placement: placement
   })
   const id = useId()
   const showPopover = () => {
@@ -24,9 +32,8 @@ export default function Popover({ children, className, renderPopover }: Props) {
   const hidePopover = () => {
     setOpen(false)
   }
-
   return (
-    <div className={className} ref={reference} onMouseEnter={showPopover} onMouseLeave={hidePopover}>
+    <Element className={className} ref={reference} onMouseEnter={showPopover} onMouseLeave={hidePopover}>
       {children}
       <FloatingPortal id={id}>
         <AnimatePresence>
@@ -47,7 +54,7 @@ export default function Popover({ children, className, renderPopover }: Props) {
             >
               <span
                 ref={arrowRef}
-                className='border-x-transparent border-t-transparent border-b-white border-[11px] absolute translate-y-[-95%] z-10'
+                className='absolute z-10 translate-y-[-95%] border-[11px] border-x-transparent border-t-transparent border-b-white'
                 style={{
                   left: middlewareData.arrow?.x,
                   top: middlewareData.arrow?.y
@@ -58,6 +65,6 @@ export default function Popover({ children, className, renderPopover }: Props) {
           )}
         </AnimatePresence>
       </FloatingPortal>
-    </div>
+    </Element>
   )
 }
