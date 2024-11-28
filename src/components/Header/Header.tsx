@@ -1,24 +1,18 @@
 import { useContext, useEffect, useRef, useState } from 'react'
-import { createSearchParams, Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Popover from '../Popover/Popover'
 import { useQuery } from '@tanstack/react-query'
 import { AppContext } from '../../contexts/app.context'
 import path from '../../constants/path'
-import { schema, Schema } from '../../utils/rule'
-import useQueryConfig from '../../hooks/useQueryConfig'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { omit } from 'lodash'
 import { purchasesStatus } from '../../constants/purchase'
 import purchaseApi from '../../apis/purcharse.api'
 import logocartnoproduct from '../../assets/images/logocartnoproduct.jpg'
 import { formatCurrency } from '../../utils/utils'
-
 import NavHeader from '../NavHeader'
+import useSearchProducts from '../../hooks/useSearchProducts'
 
-type FormData = Pick<Schema, 'name'>
-const nameSchema = schema.pick(['name'])
 const MAX_PURCHASES = 5
+
 export default function Header() {
   const [placeholder, setPlaceholder] = useState('Free Ship Đơn Từ 0Đ, Mua Hàng Ngay')
   const placeholdersRef = useRef([
@@ -38,15 +32,7 @@ export default function Header() {
   // Kết thúc đoạn placeholder
 
   const { isAuthenticated } = useContext(AppContext)
-  const navigate = useNavigate()
-  const queryConfig = useQueryConfig()
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      name: ''
-    },
-    resolver: yupResolver(nameSchema)
-  })
-
+  const { onSubmitSearch, register } = useSearchProducts()
   const { data: purchasesInCartData } = useQuery({
     queryKey: ['purchases', { status: purchasesStatus.inCart }],
     queryFn: () => purchaseApi.getPurchases({ status: purchasesStatus.inCart }),
@@ -55,24 +41,7 @@ export default function Header() {
   const purchasesInCart = purchasesInCartData?.data.data
 
   // Tìm kiếm
-  const onSubmitSearch = handleSubmit((data) => {
-    const config = queryConfig.order
-      ? omit(
-          {
-            ...queryConfig,
-            name: data.name
-          },
-          ['order', 'sort_by']
-        )
-      : {
-          ...queryConfig,
-          name: data.name
-        }
-    navigate({
-      pathname: path.home,
-      search: createSearchParams(config).toString()
-    })
-  })
+
   return (
     <div className='bg-[linear-gradient(-180deg,#f53d2d,#f63)] pb-5 pt-3 text-white  bg-white z-50 '>
       <div className='container'>
