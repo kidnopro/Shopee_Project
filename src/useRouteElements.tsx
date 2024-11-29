@@ -13,6 +13,7 @@ import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
 import Banner from './components/Banner'
 
+// cấu hình bảo vệ router
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
   return isAuthenticated ? <Outlet /> : <Navigate to='/login' />
