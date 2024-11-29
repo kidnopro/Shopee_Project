@@ -11,6 +11,7 @@ import ProductList from './pages/ProductList'
 import ProductDetail from './pages/ProductDetail'
 import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
+import Banner from './components/Banner'
 
 function ProtectedRoute() {
   const { isAuthenticated } = useContext(AppContext)
@@ -81,6 +82,7 @@ export default function useRouteElements() {
       index: true,
       element: (
         <MainLayout>
+          <Banner />
           <ProductList />
         </MainLayout>
       )
