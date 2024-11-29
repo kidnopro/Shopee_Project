@@ -40,6 +40,7 @@ export default function SortProductList({ queryConfig, pageSize }: Props) {
         sort_by: sortBy.price,
         order: orderValue
       }).toString()
+      // giá tiền sản phẩm
     })
   }
 

@@ -62,6 +62,7 @@ const Carousel: React.FC = () => {
                 ></button>
               ))}
             </div>
+            {/* đây là banner */}
             {/* Controls */}
             <button
               type='button'
