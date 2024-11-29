@@ -103,13 +103,13 @@ const Carousel: React.FC = () => {
           </div>
 
           {/* Static Image Section */}
-          <div className='w-[400px]'>
+          {/* <div className='w-[400px]'>
             <img
               src='https://cf.shopee.vn/file/vn-11134258-7ras8-m1dug8y5x4rc34_xxhdpi' // Thay URL của ảnh tĩnh của bạn tại đây
               alt='Static Image'
               className=' h-full object-cover rounded-lg'
             />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

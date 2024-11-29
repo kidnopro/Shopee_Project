@@ -22,6 +22,7 @@ export default function useSearchProducts() {
   })
   const navigate = useNavigate()
 
+  // tìm kiếm sản phẩm
   const onSubmitSearch = handleSubmit((data) => {
     const config = queryConfig.order
       ? omit(
