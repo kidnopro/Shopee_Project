@@ -9,7 +9,7 @@ import path from '../constants/path'
 type FormData = Pick<Schema, 'name'>
 
 const nameSchema = schema.pick(['name'])
-
+  
 export default function useSearchProducts() {
   const queryConfig = useQueryConfig()
 

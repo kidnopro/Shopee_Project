@@ -83,6 +83,7 @@ export default function useRouteElements() {
       element: (
         <MainLayout>
           <Banner />
+          {/* BANNER */}
           <ProductList />
         </MainLayout>
       )
