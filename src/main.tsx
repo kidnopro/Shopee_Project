@@ -7,10 +7,12 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AppProvider } from './contexts/app.context'
 
-export const queryClient = new QueryClient({
+const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchOnWindowFocus: false
+      refetchOnWindowFocus: false,
+      // retry này để nếu api hết hạn, thì nó sẽ chỉ trả về 1 lần báo lỗi
+      retry: 0
     }
   }
 })

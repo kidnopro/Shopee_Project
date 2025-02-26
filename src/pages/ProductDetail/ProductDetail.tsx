@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from 'react-router-dom'
 import productApi from '../../apis/product.api'
 import ProductRating from '../ProductList/components/ProductRating/ProductRating'
@@ -10,13 +10,13 @@ import { ProductListConfig, Product as ProductType } from '../../types/product.t
 import Product from '../ProductList/components/Product'
 import QuantityController from '../../components/QuantityControler/QuantityController'
 import purchaseApi from '../../apis/purcharse.api'
-import { queryClient } from '../../main'
 import { purchasesStatus } from '../../constants/purchase'
 import { toast } from 'react-toastify'
 import path from '../../constants/path'
 
 export default function ProductDetail() {
   const [buyCount, setBuyCount] = useState(1)
+  const queryClient = useQueryClient()
   const { nameId } = useParams()
   const id = getIdFromNameId(nameId as string)
   const { data: productDetailData } = useQuery({
