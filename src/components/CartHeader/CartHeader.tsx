@@ -18,11 +18,11 @@ export default function CartHeader() {
         <div className='container'>
           <div className='md:flex md:items-center md:justify-between'>
             <Link to={path.home} className='flex flex-shrink-0 item-end'>
-              <Link to='/' className='flex items-center'>
+              <span className='flex items-center'>
                 <img src={logoShopee} className='h-12 w-auto sm:h-14 md:h-16 lg:h-20 mb-4' alt='Logo Shopee' />
                 <div className='mx-4 h-8 w-[1px] bg-orange-500'></div>
                 <div className='text-orange-500 ml-2 lg:text-xl'>Giỏ hàng</div>
-              </Link>
+              </span>
             </Link>
             <form className='mt-3 md:mt-0 md:w-[50%]' onSubmit={onSubmitSearch}>
               <div className='flex rounded-sm border-2 border-orange'>

@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import purchaseApi from '../../apis/purcharse.api'
 import { purchasesStatus } from '../../constants/purchase'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import path from '../../constants/path'
 import { formatCurrency, generateNameId } from '../../utils/utils'
 import QuantityController from '../../components/QuantityControler/QuantityController'
@@ -44,7 +44,8 @@ export default function Cart() {
       refetch()
     }
   })
-
+  const location = useLocation()
+  const choosenPurchaseIdFromLocation = (location.state as { purchaseId: string } | null)?.purchaseId
   const purcharseInCart = purchasesInCartData?.data.data
   const isAllChecked = extendedPurchases.every((purchase) => purchase.checked)
   const checkedPurchases = extendedPurchases.filter((purchase) => purchase.checked)
@@ -60,14 +61,17 @@ export default function Cart() {
     setExtendedPurchases((prev) => {
       const extendedPurchasesObject = keyBy(prev, '_id')
       return (
-        purcharseInCart?.map((purchase) => ({
-          ...purchase,
-          disabled: false,
-          checked: Boolean(extendedPurchasesObject[purchase._id]?.checked)
-        })) || []
+        purcharseInCart?.map((purchase) => {
+          const isChoosenPurchaseFromLocation = choosenPurchaseIdFromLocation === purchase._id
+          return {
+            ...purchase,
+            disabled: false,
+            checked: isChoosenPurchaseFromLocation || Boolean(extendedPurchasesObject[purchase._id]?.checked)
+          }
+        }) || []
       )
     })
-  }, [purcharseInCart])
+  }, [purcharseInCart, choosenPurchaseIdFromLocation])
 
   const handleCheck = (purchaseIndex: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
     setExtendedPurchases(
@@ -104,14 +108,17 @@ export default function Cart() {
       updatePurchaseMutation.mutate({ product_id: purchase.product._id, buy_count: value })
     }
   }
+
   const handleDelete = (purchaseIndex: number) => () => {
     const purchaseId = extendedPurchases[purchaseIndex]._id
     deletePurchasesMutation.mutate([purchaseId])
   }
+
   const handleDeleteManyPurchases = () => {
     const purchaseIds = checkedPurchases.map((purchase) => purchase._id)
     deletePurchasesMutation.mutate(purchaseIds)
   }
+
   const handleBuyPurchases = () => {
     if (checkedPurchases.length > 0) {
       const body = checkedPurchases.map((purchase) => ({
@@ -121,6 +128,7 @@ export default function Cart() {
       buyProductsMutation.mutate(body)
     }
   }
+
   return (
     <div className='bg-neutral-100 py-16'>
       <div className='container'>

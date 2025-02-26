@@ -18,7 +18,9 @@ export default function Header() {
   const placeholdersRef = useRef([
     'VOUCHER Giảm 300.000Đ!',
     'Giảm Giá Tới 50%, Mua Ngay!',
-    'Tìm Sản Phẩm Bạn Yêu Thích'
+    'Tìm Sản Phẩm Bạn Yêu Thích',
+    'Mua Hàng Tại Shopee Mall',
+    'Shopee mua gì cũng có'
   ])
   useEffect(() => {
     const interval = setInterval(() => {

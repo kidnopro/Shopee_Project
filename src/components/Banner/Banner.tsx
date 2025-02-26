@@ -13,9 +13,8 @@ const Carousel: React.FC = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      nextSlide()
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1))
     }, 2500)
-
     return () => clearInterval(interval)
   }, [currentSlide])
 
@@ -27,89 +26,68 @@ const Carousel: React.FC = () => {
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1))
   }
 
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index)
+  }
+
   return (
-    <div className='bg-gray-200'>
-      <div className='container'>
-        <div className=' flex mt-14'>
-          {/* Carousel Section */}
-          <div id='carousel' className='relative w-[65%] group' data-carousel='slide'>
-            <div className='relative h-36 overflow-hidden rounded-lg md:h-60'>
-              <div
-                className='flex transition-transform duration-1000 ease-in-out'
-                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-              >
-                {slides.map((slide, index) => (
-                  <div key={index} className='w-full flex-shrink-0' data-carousel-item>
-                    <img
-                      src={slide}
-                      className='block w-full h-full object-cover border-none' // Đảm bảo không có viền
-                      alt={`Slide ${index + 1}`}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Indicators */}
-            <div className='absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3'>
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  type='button'
-                  className={`w-3 h-3 rounded-full ${index === currentSlide ? 'bg-white' : 'bg-gray-300'}`}
-                  aria-current={index === currentSlide}
-                  aria-label={`Slide ${index + 1}`}
-                  onClick={() => setCurrentSlide(index)}
-                ></button>
+    <div className='container mx-auto px-4 mt-10'>
+      <div className='flex flex-col lg:flex-row gap-4 items-stretch'>
+        <div className='w-full lg:w-[65%] relative flex group'>
+          <div className='overflow-hidden rounded-lg w-full h-full relative'>
+            <div
+              className='flex transition-transform duration-700 ease-in-out h-full'
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {slides.map((slide, index) => (
+                <div key={index} className='w-full flex-shrink-0 h-full'>
+                  <img src={slide} className='w-full h-full object-cover rounded-lg' alt={`Slide ${index + 1}`} />
+                </div>
               ))}
             </div>
-            {/* đây là banner */}
-            {/* Controls */}
+
             <button
-              type='button'
-              className='absolute top-1/2 left-0 z-30 flex items-center justify-center h-10 w-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-y-1/2 cursor-pointer group focus:outline-none'
+              className='absolute top-1/2 left-2 z-30 hidden group-hover:flex items-center justify-center w-10 h-10 bg-black/50 text-white rounded-full'
               onClick={prevSlide}
               aria-label='Previous Slide'
             >
-              <span className='inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white'>
-                <svg className='w-4 h-4 text-white' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 10' fill='none'>
-                  <path
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    d='M5 1 1 5l4 4'
-                  />
-                </svg>
-              </span>
+              ❮
             </button>
             <button
-              type='button'
-              className='absolute top-1/2 right-0 z-30 flex items-center justify-center h-10 w-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-y-1/2 cursor-pointer group focus:outline-none'
+              className='absolute top-1/2 right-2 z-30 hidden group-hover:flex items-center justify-center w-10 h-10 bg-black/50 text-white rounded-full'
               onClick={nextSlide}
               aria-label='Next Slide'
             >
-              <span className='inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white'>
-                <svg className='w-4 h-4 text-white' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 6 10' fill='none'>
-                  <path
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    d='m1 9 4-4-4-4'
-                  />
-                </svg>
-              </span>
+              ❯
             </button>
-          </div>
 
-          {/* Static Image Section */}
-          {/* <div className='w-[400px]'>
-            <img
-              src='https://cf.shopee.vn/file/vn-11134258-7ras8-m1dug8y5x4rc34_xxhdpi' // Thay URL của ảnh tĩnh của bạn tại đây
-              alt='Static Image'
-              className=' h-full object-cover rounded-lg'
-            />
-          </div> */}
+            <div className='absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2'>
+              {slides.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    currentSlide === index ? 'bg-white w-3 h-3' : 'bg-gray-400'
+                  }`}
+                  onClick={() => goToSlide(index)}
+                ></button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className='w-full lg:w-[35%] relative flex'>
+          <div className='overflow-hidden rounded-lg w-full h-full'>
+            <div
+              className='flex transition-transform duration-700 ease-in-out h-full'
+              style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+            >
+              {slides.map((slide, index) => (
+                <div key={index} className='w-full flex-shrink-0 h-full'>
+                  <img src={slide} className='w-full h-full object-cover rounded-lg' alt={`Slide ${index + 1}`} />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

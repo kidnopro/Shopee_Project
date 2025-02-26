@@ -9,9 +9,9 @@ import { AppContext } from './contexts/app.context'
 import path from '../src/constants/path'
 import ProductList from './pages/ProductList'
 import ProductDetail from './pages/ProductDetail'
-import Cart from './pages/Cart'
 import CartLayout from './layouts/CartLayout'
 import Banner from './components/Banner'
+import Cart from './pages/Cart'
 
 // cấu hình bảo vệ router
 function ProtectedRoute() {
