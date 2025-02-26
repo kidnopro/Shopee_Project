@@ -86,7 +86,7 @@ export default function Header() {
         <div className='cols-span-1 justify-self-start'>
           <Popover
             renderPopover={
-              <div className='relative  max-w-[400px] rounded-sm border border-gray-200 bg-white text-sm shadow-md'>
+              <div className='relative  max-w-[400px] runded-sm border border-gray-200 bg-white text-sm shadow-md'>
                 {purchasesInCart && purchasesInCart.length > 0 ? (
                   <div className='p-2'>
                     <div className='text-gray-400 capitalize'>Sản phẩm mới thêm</div>
