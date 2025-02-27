@@ -12,6 +12,8 @@ import ProductDetail from './pages/ProductDetail'
 import CartLayout from './layouts/CartLayout'
 import Banner from './components/Banner'
 import Cart from './pages/Cart'
+import UserLayout from './pages/User/layouts/UserLayout'
+import ChangePassword from './pages/User/pages/ChangePassword'
 
 // cấu hình bảo vệ router
 function ProtectedRoute() {
@@ -67,6 +69,24 @@ export default function useRouteElements() {
               <Cart />
             </CartLayout>
           )
+        },
+        {
+          path: path.user,
+          element: (
+            <MainLayout>
+              <UserLayout />
+            </MainLayout>
+          ),
+          children: [
+            {
+              path: path.profile,
+              element: <Profile />
+            },
+            {
+              path: path.changepassword,
+              element: <ChangePassword />
+            }
+          ]
         }
       ]
     },
