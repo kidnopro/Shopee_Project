@@ -76,7 +76,7 @@ export default function UserSideNav() {
           </Link>
         </div>
         <div className='mt-3'>
-          <Link to={path.HistoryPurchase} className='flex items-center capitalize'>
+          <Link to={path.historyPurchase} className='flex items-center capitalize'>
             <div className='mr-3 h-[22px] w-[22px] '>
               <svg
                 xmlns='http://www.w3.org/2000/svg'

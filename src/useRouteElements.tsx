@@ -14,6 +14,7 @@ import Cart from './pages/Cart'
 import ChangePassword from './pages/User/pages/ChangePassword'
 import UserLayout from './pages/User/layouts/UserLayout/UserLayout'
 import Profile from './pages/User/pages/Profile'
+import HistoryPurchase from './pages/User/pages/HistoryPurchase'
 
 // cấu hình bảo vệ router
 function ProtectedRoute() {
@@ -77,6 +78,10 @@ export default function useRouteElements() {
             {
               path: path.changepassword,
               element: <ChangePassword />
+            },
+            {
+              path: path.historyPurchase,
+              element: <HistoryPurchase />
             }
           ]
         }
