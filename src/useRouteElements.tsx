@@ -3,7 +3,6 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import RegisterLayout from './layouts/RegisterLayout'
 import MainLayout from './layouts/MainLayout'
-import Profile from './pages/Profile'
 import { useContext } from 'react'
 import { AppContext } from './contexts/app.context'
 import path from '../src/constants/path'
@@ -12,8 +11,9 @@ import ProductDetail from './pages/ProductDetail'
 import CartLayout from './layouts/CartLayout'
 import Banner from './components/Banner'
 import Cart from './pages/Cart'
-import UserLayout from './pages/User/layouts/UserLayout'
 import ChangePassword from './pages/User/pages/ChangePassword'
+import UserLayout from './pages/User/layouts/UserLayout/UserLayout'
+import Profile from './pages/User/pages/Profile'
 
 // cấu hình bảo vệ router
 function ProtectedRoute() {
@@ -54,14 +54,6 @@ export default function useRouteElements() {
       path: '',
       element: <ProtectedRoute />,
       children: [
-        {
-          path: path.profile,
-          element: (
-            <MainLayout>
-              <Profile />
-            </MainLayout>
-          )
-        },
         {
           path: path.cart,
           element: (
