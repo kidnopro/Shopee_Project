@@ -1,4 +1,3 @@
-import { add } from 'lodash'
 import type { RegisterOptions, UseFormGetValues } from 'react-hook-form'
 import * as yup from 'yup'
 import { AnyObject } from 'yup'
@@ -115,5 +114,5 @@ export const userSchema = yup.object({
 
 // const loginSchema = schema.omit("confirm_password");
 
-export type UserChema = yup.InferType<typeof userSchema>
+export type UserSchema = yup.InferType<typeof userSchema>
 export type Schema = yup.InferType<typeof schema>
